@@ -92,8 +92,8 @@ body {
     height: 100%;
     pointer-events: none;
     z-index: 10;
-    opacity: 0.15; 
-    background-image: url('/Users/ajinkyamawal/Desktop/my-website-creative/images/texture_22.jpg');
+    opacity: 0.2; 
+    background-image: url("images/texture_22.jpg");
     animation: noiseAnimation 0.5s linear infinite;
 }
 
@@ -209,7 +209,7 @@ body {
 .social-sidebar a {
     font-size: 14px; /* Size of the icons */
     text-decoration: none;
-    transition: transform 0.01s ease-in;
+    transition: transform 0.1s ease-in-out;
     
     /* THE CHAMELEON FIX */
     /* 1. Match background color exactly */
@@ -218,10 +218,36 @@ body {
     mix-blend-mode: difference;
 }
 
-.social-sidebar a:hover {
+.social-sidebar a:not(.ml-portfolio-btn):hover {
     /* Slight pop effect on hover */
-    transform: scale(1.5); 
+    transform: scale(1.05); 
     opacity: 0.8;
+}
+
+.ml-portfolio-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 8px;
+    background-color: #d2c4a7;
+    color: #000000;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 50;
+    letter-spacing: 1.5px;
+    text-decoration: none;
+    border-radius: 5px;
+    text-transform: uppercase;
+    transform: rotate(-90deg);
+    transform-origin: left top;
+    margin-left: -5px;
+    margin-bottom: -25px;
+    mix-blend-mode: normal;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.ml-portfolio-btn:hover {
+    opacity: 0.85;
+    transform: rotate(-90deg) translateY(-2px);
 }
 
 /* ADJUST SIGNATURE LOCATION */
