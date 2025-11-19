@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajinkys Mawal clone</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="gallery-container">
+        
+        <div class="image-column col-1">
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img1.jpg" class="landscape" >
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img2.jpg" class="portrait" >
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img3.jpg" class="portrait">
+        </div>
+
+        <div class="image-column col-2">
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img4.jpg" class="portrait" >
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img5.jpg" class="portrait">
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img6.jpg" class="landscape" >
+        </div>
+
+        <div class="image-column col-3">
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img7.jpg" class="portrait">
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img8.jpeg" class="landscape">
+            <img src="/Users/ajinkyamawal/Desktop/my-website-creative/images/img1.jpg" class="landscape" >
+        </div>
+
+    </div>
+
+    <div class="grain-overlay"></div>
+
+    <div class="main-content">
+        <div class="brand-name">AJINKYA MAWAL</div>
+        <div class="center-message">
+            <p>
+                I make videos for the internet that get people<br>
+                excited about living in the <strong>real world.</strong>
+            </p>
+        </div>
+        <nav class="bottom-nav">
+            <a href="https://github.com/a-j-i-n-k-y-a" target="_blank" rel="noopener noreferrer">GITHUB</a>
+            <a href="https://www.linkedin.com/in/ajinkya-mawal-2b0bb224b/" target="_blank" rel="noopener noreferrer">LINKEDIN</a>
+            <a href="/Users/ajinkyamawal/Desktop/my-website-creative/portfolio.html" >ML-PORTFOLIO</a>
+            <a href="/Users/ajinkyamawal/Desktop/my-website-creative/contact.html" >CONTACT</a>
+        </nav>
+    </div>
+
+    <div class="social-sidebar">
+        <a href="https://github.com/YOURUSERNAME" target="_blank">
+            <i class="fab fa-github"></i>
+        </a>
+        
+        <a href="https://linkedin.com/in/YOURUSERNAME" target="_blank">
+            <i class="fab fa-linkedin"></i>
+        </a>
+        
+        <a href="mailto:your.email@gmail.com">
+            <i class="fas fa-envelope"></i>
+        </a>
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const autoSpeed = 0.5;        
+        const scrollMultiplier = 0.8; 
+        
+        const columns = document.querySelectorAll('.image-column');
+        
+        // Store the column heights so we don't re-calculate them every frame (Fixes Jitter)
+        let columnHeights = [];
+    
+        // State variables
+        let currentScroll = 0;
+        let targetScroll = 0;
+        let isDragging = false;
+    
+        // 1. INITIAL SETUP (Wait for images to load!)
+        window.onload = function() {
+            columns.forEach((col, index) => {
+                // Clone images for infinite loop
+                col.innerHTML += col.innerHTML;
+                
+                // Measure height AFTER cloning and loading
+                // We store half the height because that's our loop point
+                columnHeights[index] = col.scrollHeight / 2;
+            });
+    
+            // Start the loop only after setup is done
+            requestAnimationFrame(animate);
+        };
+    
+        // 2. HANDLE RESIZE (If user resizes window, re-measure heights)
+        window.addEventListener('resize', () => {
+            columns.forEach((col, index) => {
+                columnHeights[index] = col.scrollHeight / 2;
+            });
+        });
+    
+        // 3. THE RENDER LOOP
+        function animate() {
+            targetScroll += autoSpeed;
+            currentScroll += (targetScroll - currentScroll) * 0.1;
+    
+            columns.forEach((col, index) => {
+                const loopHeight = columnHeights[index];
+                
+                // Safety check: If height is 0 (images not loaded yet), don't run
+                if (!loopHeight) return;
+    
+                const yPos = currentScroll % loopHeight;
+                
+                // USE TRANSLATE3D: This forces the GPU to handle the movement (Smoother)
+                col.style.transform = `translate3d(0, -${yPos}px, 0)`;
+            });
+    
+            requestAnimationFrame(animate);
+        }
+    
+        // 4. USER INTERACTION LISTENERS
+        window.addEventListener('wheel', (e) => {
+            targetScroll += e.deltaY * scrollMultiplier;
+        });
+    
+        let startY = 0;
+        window.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            isDragging = true;
+        });
+    
+        window.addEventListener('touchmove', (e) => {
+            if(!isDragging) return;
+            const y = e.touches[0].clientY;
+            const delta = startY - y;
+            targetScroll += delta * 1.5;
+            startY = y;
+        });
+    
+        window.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+    </script>
+
+</body>
+</html>

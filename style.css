@@ -1,0 +1,238 @@
+/* --- GLOBAL STYLES --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #e4d5b5; 
+    font-family: 'Courier New', Courier, monospace;
+    color: #1a1a1a;
+    overflow: hidden; /* We handle scrolling via JS */
+    height: 100vh;
+    width: 100vw;
+}
+
+.gallery-container {
+    /* Keep existing styles */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center; /* CHANGED: Center them instead of spreading to edges */
+    gap: 5%; /* CHANGED: Use % gap instead of fixed pixels so it fits on all screens */
+    padding: 0 1%; /* Reduced padding to give images room */
+    z-index: 0; 
+    opacity: 1;
+}
+
+.image-column {
+    display: flex;
+    flex-direction: column;
+    gap: 130px; 
+    width: 25%; /* CHANGED: Reduced slightly so 3 cols + gaps fit 100% perfectly */
+    align-items: center;
+    will-change: transform; 
+}
+
+/* --- UPDATED SIZE CLASSES (Scaled down relative to new column width) --- */
+
+/* Standard Portrait */
+.portrait {
+    width: 100%; /* Fills the narrow 22% column */
+    aspect-ratio: 3 / 4; 
+}
+
+/* Standard Landscape */
+.landscape {
+    width: 100%; 
+    aspect-ratio: 16 / 9; 
+}
+
+/* Square - slightly smaller */
+.square {
+    width: 80%;
+    aspect-ratio: 1 / 1;
+}
+
+/* Tiny - The "Sticker" size (very common in your screenshot) */
+.tiny {
+    width: 60%;
+    aspect-ratio: 1 / 1; 
+}
+
+/* XL - For the occasional big "Hero" image */
+.xl-portrait {
+    width: 120%; /* Slightly wider than the column */
+    aspect-ratio: 3 / 4;
+    z-index: 2; 
+}
+
+.xl-landscape {
+    width: 130%; 
+    aspect-ratio: 16 / 9;
+    margin-left: -15%; /* Centers the overlap */
+}
+
+/* --- HELPER CLASSES --- */
+.portrait { width: 70%; aspect-ratio: 3 / 4; }
+.landscape { width: 100%; aspect-ratio: 16 / 9; }
+.square { width: 80%; aspect-ratio: 1 / 1; }
+.tiny { width: 50%; aspect-ratio: 1 / 1; }
+
+/* --- LAYER 3: FILM GRAIN --- */
+.grain-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 10;
+    opacity: 0.15; 
+    background-image: url('/Users/ajinkyamawal/Desktop/my-website-creative/images/texture_22.jpg');
+    animation: noiseAnimation 0.5s linear infinite;
+}
+
+@keyframes noiseAnimation {
+    0% { background-position: 0 0; }
+    10% { background-position: -5% -10%; }
+    20% { background-position: -15% 5%; }
+    30% { background-position: 7% -25%; }
+    40% { background-position: 20% 25%; }
+    50% { background-position: -25% 10%; }
+    60% { background-position: 15% 5%; }
+    70% { background-position: 0% 15%; }
+    80% { background-position: 25% 35%; }
+    90% { background-position: -10% 10%; }
+}
+
+/* --- LAYER 4: TEXT CONTENT --- */
+.main-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 20;
+    pointer-events: none; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.brand-name, .center-message, .bottom-nav { pointer-events: auto; }
+
+.brand-name {
+    position: absolute;
+    top: 120px;
+    left: 20px;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    transform: rotate(-90deg); 
+    transform-origin: left top;
+}
+
+/* 1. Update the Center Message */
+/* 1. The Center Message */
+.center-message {
+    text-align: center;
+    max-width: 600px;
+    padding: 20px;
+    
+    /* CHANGE: Use the background color, not white */
+    color: #000000; 
+    
+    mix-blend-mode: exclusion;
+    
+    /* ADD: Bold makes the "difference" effect much sharper */
+    font-weight: 500; 
+    z-index: 100;
+}
+
+.center-message p {
+    font-size: 12px;
+    line-height: 1.8;
+    letter-spacing: 1px;
+}
+
+.bottom-nav {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 30px;
+}
+
+.bottom-nav a {
+    text-decoration: none;
+    color: #000;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.bottom-nav a:hover { text-decoration: line-through; }
+
+@media (max-width: 768px) {
+    /* On mobile, we hide one column or squeeze them */
+    .gallery-container { padding: 0 5%; }
+    .image-column { width: 45%; } 
+    /* Hide the middle column on mobile to prevent crowding */
+    .col-2 { display: none; } 
+    
+    .center-message p { font-size: 16px; }
+    .bottom-nav { flex-direction: column; gap: 10px; text-align: center; }
+}
+
+/* --- BOTTOM LEFT SOCIAL SIDEBAR --- */
+.social-sidebar {
+    position: absolute; /* Fixed relative to screen */
+    bottom: 40px;       /* Distance from bottom */
+    left: 20px;         /* Distance from left */
+    
+    display: flex;
+    flex-direction: column; /* Stacks them vertically */
+    gap: 20px;              /* Space between icons */
+    
+    z-index: 100;
+    pointer-events: auto;   /* Makes them clickable */
+}
+
+.social-sidebar a {
+    font-size: 14px; /* Size of the icons */
+    text-decoration: none;
+    transition: transform 0.01s ease-in;
+    
+    /* THE CHAMELEON FIX */
+    /* 1. Match background color exactly */
+    color: #000000; 
+    /* 2. Apply difference blend mode */
+    mix-blend-mode: difference;
+}
+
+.social-sidebar a:hover {
+    /* Slight pop effect on hover */
+    transform: scale(1.5); 
+    opacity: 0.8;
+}
+
+/* ADJUST SIGNATURE LOCATION */
+/* Since we put icons in the bottom left, we should move the signature name 
+   slightly to the right or up so they don't crash into each other. 
+   Update your existing .signature-name class: */
+
+.signature-name {
+    /* ... keep existing styles ... */
+    
+    /* CHANGE THIS: Move it slightly right to sit next to icons */
+    left: 20px; 
+    bottom: 40px;
+}
